@@ -11,17 +11,17 @@ export const tokenSet = (token) => {
   };
 };
 
-export const userSet = (id) => {
-  createCookie('user', id, 8);
-  return {
-    type: 'USER_SET',
-    payload: id
-  };
-};
+// export const userSet = (id) => {
+//   createCookie('user', id, 8);
+//   return {
+//     type: 'USER_SET',
+//     payload: id
+//   };
+// };
 
 export const logout = () => {
   deleteCookie('portfolio-login-token');
-  return { type: 'LOGOUT' };
+  return {type: 'LOGOUT'};
 };
 
 export const signupRequest = (user) => (dispatch) => {
@@ -29,8 +29,7 @@ export const signupRequest = (user) => (dispatch) => {
     .withCredentials()
     .send(user)
     .then((res) => {
-      dispatch(tokenSet(res.body.token));
-      dispatch(userSet(res.body.user._id));
+      dispatch(tokenSet(res.body));
       return res;
     })
     .catch((err) => console.error(err));
@@ -41,7 +40,7 @@ export const loginRequest = (user) => (dispatch) => {
     .withCredentials()
     .auth(user.email, user.password)
     .then((res) => {
-      dispatch(tokenSet(res.text));
+      dispatch(tokenSet(res.body));
       return res;
     })
     .catch((err) => console.error(err));
