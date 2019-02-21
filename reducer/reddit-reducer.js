@@ -3,9 +3,7 @@
 export default (state=null, action) => {
   let {type, payload} = action;
   switch(type){
-  case 'PROFILE_CREATE':
-    return [payload, ...state];
-  case 'PROFILE_FETCH':
+  case 'SUBREDDIT_FETCH':
     return payload;
   default:
     return state;

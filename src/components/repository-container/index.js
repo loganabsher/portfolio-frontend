@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import superagent from 'superagent';
 
 import {allRepositoriesRequest} from '../../../actions/repo-actions.js';
 
@@ -12,37 +12,42 @@ class RepositoryContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      repos: [],
       loading: true
-    }
+    };
   }
 
   componentDidMount(){
-    console.log('loading repos');
-    this.props.allRepositories()
+    this.props.allRepositories();
   }
 
-  componentWillReceiveProps(nextProps){
-    console.log('props recieved', nextProps);
-    this.setState({repo: nextProps.repo, loading: false});
+  componentDidUpdate() {
+    if(this.state.repos.length !== this.props.repos.length){
+      this.setState({repos: this.props.repos, loading: false});
+    }
   }
 
   render() {
     return(
       <div className='repository-container'>
-        {console.log('repos', this.props.repo)}
         <p>thi is the repo page</p>
-        {this.state.loading ? <p>...waiting for repos</p> : <RepoTable repos={this.props.repo} />}
+        {this.state.loading ? <p>...waiting for repos</p> : <RepoTable repos={this.props.repos} />}
       </div>
-    )
+    );
   }
 }
 
-let mapStateToProps = (state) => ({
-  repo: state.repo
+RepositoryContainer.PropTypes = {
+  allRepositories: PropTypes.func,
+  repos: PropTypes.array
+};
+
+const mapStateToProps = (state) => ({
+  repos: state.repos
 });
 
-let mapDispatchToProps = (dispatch) => ({
-  allRepositories: (repo) => dispatch(allRepositoriesRequest())
+const mapDispatchToProps = (dispatch) => ({
+  allRepositories: () => dispatch(allRepositoriesRequest())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RepositoryContainer);

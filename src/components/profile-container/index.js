@@ -1,13 +1,14 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {profileCreateRequest} from '../../../actions/profile-actions.js';
+import {profileCreateRequest, profileFetchRequest} from '../../../actions/profile-actions.js';
 
 import ProfileForm from '../forms/profile-form';
 
-class UserSettingsContainer extends React.Component{
+class ProfileContainer extends React.Component{
   constructor(props){
     super(props);
     this.state = {
@@ -15,6 +16,10 @@ class UserSettingsContainer extends React.Component{
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount(){
+    this.props.profileFetch();
   }
 
   handleSubmit(profile){
@@ -26,21 +31,28 @@ class UserSettingsContainer extends React.Component{
     return(
       <div className='profile-container'>
         <p>settings page</p>
-        <ProfileForm onComplete={this.handleSubmit} />
+        <ProfileForm onComplete={this.handleSubmit} profile={this.state.profile} />
       </div>
     );
   }
 }
 
+ProfileContainer.PropTypes = {
+  history: PropTypes.func,
+  profileFetch: PropTypes.func,
+  profileCreate: PropTypes.func,
+  profile: PropTypes.object
+};
+
 const mapStateToProps = (state) => ({
   profile: state.profile
 });
 
-// NOTE: the update request should maybe be moved to the individual message templates
 const mapDispatchToProps = (dispatch) => {
   return{
-    profileCreate: (profile) => dispatch(profileCreateRequest(profile))
+    profileCreate: (profile) => dispatch(profileCreateRequest(profile)),
+    profileFetch: () => dispatch(profileFetchRequest())
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserSettingsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileContainer);

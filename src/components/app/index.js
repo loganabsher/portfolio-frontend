@@ -1,5 +1,7 @@
 'use strict';
 
+import '../../style/main.scss';
+
 import React from 'react';
 import {connect} from 'react-redux';
 import {BrowserRouter, Route} from 'react-router-dom';
@@ -14,6 +16,7 @@ import ProfileContainer from '../profile-container';
 import Dashboard from '../dashboard';
 import RepositoryContainer from '../repository-container';
 import CowsayContainer from '../cowsay-container';
+import RedditContainer from '../reddit-container';
 
 class App extends React.Component{
   render(){
@@ -27,6 +30,7 @@ class App extends React.Component{
             <Route exact path='/' component={Dashboard} />
             <Route exact path='/repo' component={RepositoryContainer} />
             <Route exact path='/cowsay' component={CowsayContainer} />
+            <Route exact path='/reddit' component={RedditContainer} />
           </section>
         </BrowserRouter>
       </div>
@@ -34,9 +38,9 @@ class App extends React.Component{
   }
 }
 
-let mapStateToProps = (state) => ({auth: state.auth});
+const mapStateToProps = (state) => ({auth: state.auth});
 
-let mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   tokenSet: (token) => dispatch(tokenSet(token))
 });
 
