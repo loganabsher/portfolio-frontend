@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 import {connect} from 'react-redux';
 
 import {
@@ -11,7 +11,7 @@ import {
   messageFetchAllUserRequest,
   messageUpdateRequest,
   messageDeleteRequest
-} from '../../../actions/message-actions.js';
+} from '../../../actions/posting-actions.js';
 
 import MessageForm from '../forms/message-form';
 import MessageTemplate from '../templates/message-template';
@@ -20,7 +20,7 @@ class Dashboard extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      loading: true
+      messages: null
     };
 
     this.handleNewMessage = this.handleNewMessage.bind(this);
@@ -35,7 +35,7 @@ class Dashboard extends React.Component{
 
   componentWillReceiveProps(nextProps){
     console.log('props recieved', nextProps);
-    this.setState({message: JSON.parse(nextProps.message), loading: false});
+    this.setState({messages: nextProps.messages, loading: false});
   }
 
   handleNewMessage(message){
@@ -66,9 +66,8 @@ class Dashboard extends React.Component{
       <div className='dashboard'>
         <p>hey you made it to the dashboard</p>
         <MessageForm onComplete={this.handleNewMessage} />
-        {this.state.message ? this.state.message.map((ele, index) => {
-          console.log(this.state);
-          return(<MessageTemplate key={index} title={ele.title} text={ele.text} comments={ele.comments} />);
+        {this.state.messages ? this.state.messages.map((ele, index) => {
+          return(<MessageTemplate key={index} message={ele} />);
         }) : <p>no messages</p>
         }
       </div>
@@ -76,18 +75,18 @@ class Dashboard extends React.Component{
   }
 }
 
-Dashboard.PropTypes = {
-  messageCreate: PropTypes.func,
-  messageFetch: PropTypes.func,
-  messageFetchAll: PropTypes.func,
-  messageFetchAllUser: PropTypes.func,
-  messageUpdate: PropTypes.func,
-  messageDelete: PropTypes.func,
-  message: PropTypes.array
+Dashboard.propTypes = {
+  messageCreate: propTypes.func,
+  messageFetch: propTypes.func,
+  messageFetchAll: propTypes.func,
+  messageFetchAllUser: propTypes.func,
+  messageUpdate: propTypes.func,
+  messageDelete: propTypes.func,
+  message: propTypes.array
 };
 
 const mapStateToProps = (state) => ({
-  message: state.message
+  messages: state.messages
 });
 
 // NOTE: the update request should maybe be moved to the individual message templates

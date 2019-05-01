@@ -17,15 +17,12 @@ export const logout = () => {
 };
 
 export const tokenCheck = (token) => {
-  console.log('tokencheck', token);
   if(token){
-    console.log('valid')
     return {
       type: 'TOKEN_CHECK',
       payload: token
     };
   }else{
-    console.log('invalid')
     return {
       type: 'TOKEN_CHECK',
       payload: null
@@ -54,21 +51,18 @@ export const tokenCheckRequest = (token) => (dispatch) => {
     return superagent.get(`${process.env.API_URL}/api/checkCookie`)
       .set('Authorization', `Bearer ${token}`)
       .then((token) => {
-        console.log('valid token:', token);
-        // NOTE: shoulnt need this if / else, but just being safe
         if(token){
-          return dispatch(tokenCheck(token));
+          return dispatch(tokenCheck(token.body));
         }else{
           return dispatch(tokenCheck(null));
         }
       })
       .catch(() => {
-        console.log('invalid token', token);
+        // NOTE: need to see if there is a way to edit the delete cookie to completly remove everything including the reference
         deleteCookie('portfolio-login-token');
         return dispatch(tokenCheck(null));
       });
   }else{
-    console.log('no token', token);
     return dispatch(tokenCheck(null));
   }
 };

@@ -3,7 +3,7 @@
 import './_auth-form.scss';
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 
 class AuthForm extends React.Component{
   constructor(props){
@@ -82,8 +82,8 @@ class AuthForm extends React.Component{
   }
 }
 
-AuthForm.PropTypes = {
-  onComplete: PropTypes.func
+AuthForm.propTypes = {
+  onComplete: propTypes.func
 };
 
 export default AuthForm;
