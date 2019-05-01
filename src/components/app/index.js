@@ -4,9 +4,10 @@ import '../../style/main.scss';
 
 import React from 'react';
 import {connect} from 'react-redux';
+import propTypes from 'prop-types';
 import {BrowserRouter, Route} from 'react-router-dom';
 
-import {tokenSet} from '../../../actions/auth-actions';
+import {tokenSet, tokenCheckRequest} from '../../../actions/auth-actions';
 
 import '../../style/footer.scss';
 
@@ -19,6 +20,13 @@ import CowsayContainer from '../cowsay-container';
 import RedditContainer from '../reddit-container';
 
 class App extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      auth: false
+    };
+  }
+
   render(){
     return(
       <div className='app'>
@@ -38,10 +46,16 @@ class App extends React.Component{
   }
 }
 
+App.propTypes = {
+  auth: propTypes.object,
+  tokenCheckRequest: propTypes.func
+};
+
 const mapStateToProps = (state) => ({auth: state.auth});
 
 const mapDispatchToProps = (dispatch) => ({
-  tokenSet: (token) => dispatch(tokenSet(token))
+  tokenSet: (token) => dispatch(tokenSet(token)),
+  tokenCheckRequest: (token) => dispatch(tokenCheckRequest(token))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
